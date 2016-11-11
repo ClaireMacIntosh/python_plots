@@ -114,23 +114,24 @@ for year in range(year_start, year_stop + 1):
 
     print 'sst_files = ', np.shape(sst_all)
 
-print '------------------------------------------------' \
-      'making anomaly from monthly climatology' \
-      '-------------------------------------------------'
+print '------------------------------------------------' 
+print 'making anomaly from monthly climatology' 
+print '-------------------------------------------------'
 anom = make_anomaly(sst_all, nyr)
 
-print '------------------------------------------------' \
-      'make annual mean SST and anomaly' \
-      '------------------------------------------------'
+print '------------------------------------------------' 
+print 'make annual mean SST and anomaly' 
+print '------------------------------------------------'
 sst_avg = np.nanmean(sst_all, axis=0)
+print np.shape(sst_avg)
 sst_ann1 = np.reshape(sst_all, (12, nyr, 720, 1440), order='f')
 sst_ann_avg = np.nanmean(sst_ann1, axis=0)
 sst_ann2 = np.reshape(anom, (12, nyr, 720, 1440), order='f')
 sst_ann_avg2 = np.nanmean(sst_ann2, axis=0)
 
-print '-----------------------------------------------' \
-      'making seasonal anomaly means' \
-      '------------------------------------------------'
+print '-----------------------------------------------' 
+print 'making seasonal anomaly means' 
+print '------------------------------------------------'
 anom_seas1 = np.copy(anom[2:-10, :, :])
 anom_seas = np.reshape(anom_seas1, (3, (nyr-1)*4, 720, 1440), order='f')
 anom_seas = np.nanmean(anom_seas, axis=0)
@@ -139,9 +140,9 @@ djf1 = np.reshape(anom_seas, (4, (nyr-1), 720, 1440), order='f')
 djf = djf1[3, :, :, :]
 jja = djf1[1, :, :, :]
 
-print '-------------------------------------------------' \
-      'making standard deviations' \
-      '-------------------------------------------------'
+print '-------------------------------------------------' 
+print 'making standard deviations' 
+print '-------------------------------------------------'
 sst_ann_std = np.std(sst_ann_avg, axis=0)
 anom_std = np.std(anom, axis=0)
 djf_std = np.std(djf, axis=0)
@@ -159,9 +160,9 @@ print 'min djf ann stdev', np.nanmin(djf_std)
 print 'min jja ann stdev', np.nanmin(jja_std)
 print '--------------------------------------------------'
 
-print '----------------------------------------------------' \
-      'plotting' \
-      '----------------------------------------------------'
+print '----------------------------------------------------' 
+print 'plotting' 
+print '----------------------------------------------------'
 
 colors = ['#00ffff', '#0033cc', '#0066ff', '#3399ff', '#66ccff', '#ccffff', '#ffff00', '#ffcc00', '#ff9933',
           '#ff6600', '#ff3300', '#ff0000']
@@ -176,7 +177,7 @@ fig = plt.figure(figsize=(11, 8))
 ax1 = fig.add_subplot(321)
 # -----------------------------------------------------
 plt.imshow(np.flipud(sst_avg), interpolation='nearest', cmap=plt.get_cmap('Blues'))
-plt.title('Time mean SST 1992-2015 \n from monthly input data', fontsize=8)
+plt.title('Time mean SSM/I SST 1998-2013 \n from monthly input data', fontsize=8)
 plt.colorbar(extend='both', shrink=0.8)
 plt.xticks(xtv, xtl, fontsize=8)
 plt.yticks(ytv, ytl, fontsize=8)
@@ -202,7 +203,7 @@ clevs = np.arange(0, 2.6, 0.2)
 vmin = 0
 vmax = 2.4
 plt.imshow(sst_ann_std, interpolation='nearest', vmin=vmin, vmax=vmax, cmap=plt.get_cmap('rainbow', 10))
-plt.title('STD of annual mean SST \n (n=24),1992-2015')
+plt.title('STD of annual mean SST \n (n=16),1998-2013')
 plt.colorbar(extend='both', ticks=clevs, shrink=0.8)
 plt.xticks(xtv, xtl, fontsize=8)
 plt.yticks(ytv, ytl, fontsize=8)
@@ -213,7 +214,7 @@ ax5 = fig.add_subplot(325)
 clevs = np.arange(0, 2.6, 0.2)
 djf_std = np.flipud(djf_std)
 plt.imshow(djf_std, interpolation='nearest', vmin=vmin, vmax=vmax, cmap=plt.get_cmap('rainbow', 12))
-plt.title('STD of annual DJF SST anomaly \n (n=23), Dec 1992- Feb 2015')
+plt.title('STD of annual DJF SST anomaly \n (n=15), Dec 1998- Feb 2013')
 plt.colorbar(extend='both', ticks=clevs, shrink=0.8)
 plt.xticks(xtv, xtl, fontsize=8)
 plt.yticks(ytv, ytl, fontsize=8)
@@ -223,7 +224,7 @@ ax6 = fig.add_subplot(326)
 # ------------------------------------------------------
 jja_std = np.flipud(jja_std)
 plt.imshow(jja_std, interpolation='nearest', vmin=vmin, vmax=vmax, cmap=plt.get_cmap('rainbow', 12))
-plt.title('STD of annual JJA SST anomaly \n (n=23), Jun 1992- Aug 2015')
+plt.title('STD of annual JJA SST anomaly \n (n=15), Jun 1998- Aug 2013')
 plt.colorbar(extend='both', ticks=clevs, shrink=0.8)
 plt.xticks(xtv, xtl, fontsize=8)
 plt.yticks(ytv, ytl, fontsize=8)
@@ -234,9 +235,9 @@ plt.savefig('SSMi_SST_STD_for_Chris_Nov16.png')
 plt.savefig('SSMi_SST_STD_for_Chris_Nov16.eps')
 plt.show()
 
-print '----------------------------------------------------' \
-      'plotting....second figure' \
-      '----------------------------------------------------'
+print '----------------------------------------------------' 
+print 'plotting....second figure' 
+print '----------------------------------------------------'
 
 fig = plt.figure(figsize=(11, 8))
 
@@ -262,7 +263,7 @@ lons = (-np.pi+delta*np.indices((nlats, nlons))[1, :, :])
 x, y = m(lons*180./np.pi, lats*180./np.pi)
 
 cs = plt.contourf(x, y, sst_ann_std, clevs, extend='both', colors=colors)
-plt.title('STD of annual mean SST \n (n = 24), 1998-2015')
+plt.title('STD of annual mean SST \n (n = 16), 1998-2013')
 plt.colorbar(extend='both', ticks=clevs, shrink=0.8)
 
 plt.savefig('SSMi_SST_STD_for_Chris_Nov16_newscale.png')
