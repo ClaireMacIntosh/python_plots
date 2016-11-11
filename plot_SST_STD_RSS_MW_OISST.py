@@ -85,7 +85,7 @@ def makefilelist(ystart, ystop, path=''):
 # =============================================
 
 year_start = 1998
-year_stop = 2004
+year_stop = 2013
 nyr = (year_stop-year_start+1)
 
 dirin = "/glusterfs/surft/data/RSS-MW-OISST-v4.0_nc/"
@@ -122,7 +122,7 @@ anom = make_anomaly(sst_all, nyr)
 print '------------------------------------------------' \
       'make annual mean SST and anomaly' \
       '------------------------------------------------'
-sst_avg = np.nanmean(sst_all)
+sst_avg = np.nanmean(sst_all, axis=0)
 sst_ann1 = np.reshape(sst_all, (12, nyr, 720, 1440), order='f')
 sst_ann_avg = np.nanmean(sst_ann1, axis=0)
 sst_ann2 = np.reshape(anom, (12, nyr, 720, 1440), order='f')
