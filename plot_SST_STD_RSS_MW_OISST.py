@@ -118,11 +118,11 @@ print '------------------------------------------------'
 print 'making anomaly from monthly climatology' 
 print '-------------------------------------------------'
 anom = make_anomaly(sst_all, nyr)
-
+#anom = sst_all
 print '------------------------------------------------' 
 print 'make annual mean SST and anomaly' 
 print '------------------------------------------------'
-sst_avg = np.nanmean(sst_all, axis=0)
+sst_avg = np.nanmean(sst_all, axis=0) # avg SST anywhere there is data
 print np.shape(sst_avg)
 sst_ann1 = np.reshape(sst_all, (12, nyr, 720, 1440), order='f')
 sst_ann_avg = np.nanmean(sst_ann1, axis=0)
@@ -143,10 +143,10 @@ jja = djf1[1, :, :, :]
 print '-------------------------------------------------' 
 print 'making standard deviations' 
 print '-------------------------------------------------'
-sst_ann_std = np.std(sst_ann_avg, axis=0)
-anom_std = np.std(anom, axis=0)
-djf_std = np.std(djf, axis=0)
-jja_std = np.std(jja, axis=0)
+sst_ann_std = np.nanstd(sst_ann_avg, axis=0)
+anom_std = np.nanstd(anom, axis=0)
+djf_std = np.nanstd(djf, axis=0)
+jja_std = np.nanstd(jja, axis=0)
 
 print '-------------------------------------------------'
 print 'max sst ann stdev', np.nanmax(sst_ann_std)
@@ -190,7 +190,7 @@ vmin = 0
 vmax = 2.4
 anom_std = np.flipud(anom_std)
 plt.imshow(anom_std, interpolation='nearest', vmin=vmin, vmax=vmax, cmap=plt.get_cmap('rainbow', 12))
-plt.title('STD of monthly SST anomaly \n (n=288), 1992-2015')
+plt.title('STD of monthly SST anomaly \n (n=192), 1998-2013')
 plt.colorbar(extend='both', ticks=clevs, shrink=0.8)
 plt.xticks(xtv, xtl, fontsize=8)
 plt.yticks(ytv, ytl, fontsize=8)
@@ -251,7 +251,7 @@ vmin = 0
 vmax = 2.4
 
 m = Basemap(projection='cyl', llcrnrlat=-90, urcrnrlat=90,
-            llcrnrlon=-180, urcrnrlon=180, resolution='c')
+            llcrnrlon=0, urcrnrlon=360, resolution='c')
 m.drawcoastlines() 
 m.fillcontinents(color='white', lake_color='white')
 m.drawparallels(np.arange(-90., 91., 30.), labels=[1, 0, 0, 0], fontsize=10)
